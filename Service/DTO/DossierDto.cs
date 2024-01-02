@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Core.Entities;
 using Service.Common.Mappings;
+using Microsoft.AspNetCore.Http; // Include this namespace
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,11 +24,12 @@ namespace Service.DTO
 
         public string IdUniteResponsable { get; set; }
 
-        public byte[] ScanDossier { get; set; }
+        public IFormFile File { get; set; } // Add this property for file upload
+        public byte[]? ScanDossier { get; set; }
 
-        public LocalDto IdLocalNavigation { get; set; }
+        public LocalDto? IdLocalNavigation { get; set; }
 
-        public UniteResponsableDto IdUniteResponsableNavigation { get; set; }
+        public UniteResponsableDto? IdUniteResponsableNavigation { get; set; }
 
         public ICollection<MouvementDto> Mouvements { get; set; } = new List<MouvementDto>();
 

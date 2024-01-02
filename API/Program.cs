@@ -9,7 +9,8 @@ build.AddJsonFile("appsettings.json");
 var configuration = build.Build();
 
 Log.Logger = new LoggerConfiguration()
-              .ReadFrom.Configuration(configuration)
+            //   .ReadFrom.Configuration(configuration)
+             .WriteTo.Console()
               .CreateLogger();
 
 var builder = WebApplication.CreateBuilder(args);

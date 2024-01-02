@@ -31,8 +31,8 @@ namespace Core.Migrations
                 columns: table => new
                 {
                     id_local = table.Column<string>(type: "character varying", nullable: false),
-                    adresse = table.Column<string>(type: "character varying", nullable: false),
-                    localisation = table.Column<string>(type: "character varying", nullable: false),
+                    adresse = table.Column<string>(type: "character varying", nullable: true),
+                    localisation = table.Column<string>(type: "character varying", nullable: true),
                     coordonnees = table.Column<NpgsqlPoint>(type: "point", nullable: true)
                 },
                 constraints: table =>
@@ -57,10 +57,10 @@ namespace Core.Migrations
                 columns: table => new
                 {
                     id_unite = table.Column<string>(type: "character varying", nullable: false),
-                    nom_unite = table.Column<string>(type: "character varying", nullable: false),
-                    adresse = table.Column<string>(type: "character varying", nullable: false),
-                    numero = table.Column<string>(type: "character varying", nullable: false),
-                    code_agence = table.Column<string>(type: "character varying", nullable: false)
+                    nom_unite = table.Column<string>(type: "character varying", nullable: true),
+                    adresse = table.Column<string>(type: "character varying", nullable: true),
+                    numero = table.Column<string>(type: "character varying", nullable: true),
+                    code_agence = table.Column<string>(type: "character varying", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -69,8 +69,7 @@ namespace Core.Migrations
                         name: "unite_responsable_code_agence_fkey",
                         column: x => x.code_agence,
                         principalTable: "agence",
-                        principalColumn: "code_agence",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "code_agence");
                 });
 
             migrationBuilder.CreateTable(

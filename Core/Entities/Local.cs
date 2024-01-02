@@ -6,11 +6,11 @@ namespace Core.Entities;
 
 public partial class Local
 {
-    public string IdLocal { get; set; }
+     public string IdLocal { get; set; } = Guid.NewGuid().ToString();
 
-    public string Adresse { get; set; }
+    public string? Adresse { get; set; }
 
-    public string Localisation { get; set; }
+    public string? Localisation { get; set; }
 
     public NpgsqlPoint? Coordonnees { get; set; }
 

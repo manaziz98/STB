@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Service.Service;
 using Microsoft.AspNetCore.Http.HttpResults;
+using AutoMapper;
 
 namespace VotreNamespace.Controllers
 {
@@ -18,12 +19,18 @@ namespace VotreNamespace.Controllers
     public class DossierController : ControllerBase
     {
         private readonly IDossierService _dossierService;
+        private readonly ILocalService _localService;
+        private readonly IUniteResponsableService _uniteResponsableService;
+        private readonly IMapper _mapper;
         private readonly Serilog.ILogger _logger;
 
-        public DossierController(IDossierService dossierService, Serilog.ILogger logger)
+        public DossierController(IDossierService dossierService, IUniteResponsableService uniteResponsableService,  ILocalService localService, Serilog.ILogger logger, IMapper mapper)
         {
             _dossierService = dossierService;
+            _localService = localService;
+            _uniteResponsableService = uniteResponsableService;
             _logger = logger;
+            _mapper = mapper;
         }
 
         // Endpoint pour récupérer tous les dossiers
@@ -31,7 +38,6 @@ namespace VotreNamespace.Controllers
         public IActionResult GetDossiers()
         {
             var dossiers = _dossierService.GetDossiers();
-            _logger.Information("This is an information in GetDossiers");
             if (dossiers != null)
             {
                 return Ok(dossiers);
@@ -56,10 +62,25 @@ namespace VotreNamespace.Controllers
 
         // Endpoint pour ajouter un dossier
         [HttpPost]
-        public async Task<ActionResult> AddDossier([FromBody] DossierDto dossierDto)
+        [Consumes("multipart/form-data")]
+        public async Task<ActionResult> AddDossier([FromForm] DossierDto dossierDto)
         {
             try
             {
+                _logger.Information("this idLocal: " +  dossierDto.IdLocal);
+                if (dossierDto.File != null && dossierDto.File.Length > 0)
+                {
+                    using (var ms = new MemoryStream())
+                    {
+                        await dossierDto.File.CopyToAsync(ms);
+                        dossierDto.ScanDossier = ms.ToArray(); // Convert to byte array
+                    }
+                }
+
+                dossierDto.IdLocalNavigation ??= new LocalDto();
+                dossierDto.IdUniteResponsableNavigation ??= new UniteResponsableDto();
+
+
                 var added = await _dossierService.AddDossier(dossierDto);
                 return Ok(added);
             }
@@ -69,6 +90,7 @@ namespace VotreNamespace.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+
 
         // Endpoint pour récupérer un dossier par son IdDossier
         [HttpGet("{IdDossier}")]

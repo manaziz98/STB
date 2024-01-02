@@ -13,7 +13,7 @@ using NpgsqlTypes;
 namespace Core.Migrations
 {
     [DbContext(typeof(ArchiveDbContext))]
-    [Migration("20240101220252_InitialCreate")]
+    [Migration("20240102012704_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -130,7 +130,6 @@ namespace Core.Migrations
                         .HasColumnName("id_local");
 
                     b.Property<string>("Adresse")
-                        .IsRequired()
                         .HasColumnType("character varying")
                         .HasColumnName("adresse");
 
@@ -139,7 +138,6 @@ namespace Core.Migrations
                         .HasColumnName("coordonnees");
 
                     b.Property<string>("Localisation")
-                        .IsRequired()
                         .HasColumnType("character varying")
                         .HasColumnName("localisation");
 
@@ -250,22 +248,18 @@ namespace Core.Migrations
                         .HasColumnName("id_unite");
 
                     b.Property<string>("Adresse")
-                        .IsRequired()
                         .HasColumnType("character varying")
                         .HasColumnName("adresse");
 
                     b.Property<string>("CodeAgence")
-                        .IsRequired()
                         .HasColumnType("character varying")
                         .HasColumnName("code_agence");
 
                     b.Property<string>("NomUnite")
-                        .IsRequired()
                         .HasColumnType("character varying")
                         .HasColumnName("nom_unite");
 
                     b.Property<string>("Numero")
-                        .IsRequired()
                         .HasColumnType("character varying")
                         .HasColumnName("numero");
 
@@ -357,8 +351,6 @@ namespace Core.Migrations
                     b.HasOne("Core.Entities.Agence", "CodeAgenceNavigation")
                         .WithMany("UniteResponsables")
                         .HasForeignKey("CodeAgence")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
                         .HasConstraintName("unite_responsable_code_agence_fkey");
 
                     b.Navigation("CodeAgenceNavigation");
